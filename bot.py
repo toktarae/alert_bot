@@ -1,5 +1,5 @@
 import logging
-from telegram import Update, ReplyKeyboardMarkup
+from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters, ConversationHandler
 
 TOKEN = "8064065506:AAEhEhDYD7DJqumMztFVava42YMB1ju-OWI"
@@ -9,13 +9,14 @@ logger = logging.getLogger(__name__)
 
 # Этапы сценариев
 (G_CITY, G_TOTAL_BS, G_DOWN_BS, G_TIME, G_CAUSE, G_RESPONSIBLE) = range(6)
-current_template = ""
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Ассаламу алейкум! Выберите тип рассылки:\n/outage\n/degradation\n/datacenter")
-/outage
-/degradation
-/datacenter")
+    await update.message.reply_text(
+        "Ассаламу алейкум! Выберите тип рассылки:\n"
+        "/outage\n"
+        "/degradation\n"
+        "/datacenter"
+    )
 
 # OUTAGE
 async def outage_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -51,10 +52,12 @@ async def collect_cause(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def collect_responsible(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['responsible'] = update.message.text
     data = context.user_data
-    msg = f"Наблюдается отсутствие всех видов сервисов для абонентов компании в г. {data['city']} с {data['time']}. " +           f"Вне сервиса {data['down_bs']} БС из {data['total_bs']}. Причина: {data['cause']}. Ответственный: {data['responsible']}."
-    await update.message.reply_text("📢 Готовое сообщение:
-
-" + msg)
+    msg = (
+        f"Наблюдается отсутствие всех видов сервисов для абонентов компании в г. {data['city']} с {data['time']}. "
+        f"Вне сервиса {data['down_bs']} БС из {data['total_bs']}. Причина: {data['cause']}. "
+        f"Ответственный: {data['responsible']}."
+    )
+    await update.message.reply_text("📢 Готовое сообщение:\n\n" + msg)
     return ConversationHandler.END
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
