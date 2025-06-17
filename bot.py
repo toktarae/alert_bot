@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 current_template = ""
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Ассаламу алейкум! Выберите тип рассылки:
+    await update.message.reply_text("Ассаламу алейкум! Выберите тип рассылки:\n/outage\n/degradation\n/datacenter")
 /outage
 /degradation
 /datacenter")
